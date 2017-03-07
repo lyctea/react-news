@@ -50,16 +50,30 @@ class PCHeader extends React.Component {
         };
         var formData = this.props.form.getFieldsValue();
         console.log(formData);
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=" + this.state.action + "&username=" + formData.username + "&password=" + formData.password + "&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=" + this.state.action
+        + "&username=" + formData.username
+        + "&password=" + formData.password
+        + "&r_userName=" + formData.r_userName
+        + "&r_password=" + formData.r_password
+        + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions)
+        .then(response => response.json()).then(json => {
+            console.log(json);
             this.setState({userNickName: json.NickUserName, userid: json.UserId});
-            localStorage.userid = json.UserId;
-            localStorage.userNickName = json.NickUserName;
+            // localStorage.userid = json.UserId;
+            // localStorage.userNickName = json.NickUserName;
         });
         if (this.state.action == "login") {
             this.setState({hasLogined: true});
         }
         message.success("请求成功！");
         this.setModalVisible(false);
+    };
+    callback(){
+      if(key === 1){
+        this.setState({action:'login'})
+      }else if (key === 2) {
+        this.setState({action:'register'})
+      }
     };
     render() {
         let {getFieldDecorator ,getFieldProps} = this.props.form;
@@ -101,7 +115,20 @@ class PCHeader extends React.Component {
                         </Menu>
 
                         <Modal title='用户中心' wrapClass='vertical-center-modald' visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText="关闭">
-                            <Tabs type='card'>
+                            <Tabs type='card' onChange={this.callback.bind(this)}>
+
+                              <TabPane tab='登陆' key='1'>
+                                  <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+                                      <FormItem label="账户">
+                                          <Input placeholder="请输入您的账号" {...getFieldProps('userName')}/>
+                                      </FormItem>
+                                      <FormItem label="密码">
+                                          <Input type="password" placeholder="请输入您的密码" {...getFieldProps('password')}/>
+                                      </FormItem>
+                                      <Button type="primary" htmlType="submit">登陆</Button>
+                                  </Form>
+                              </TabPane>
+
                                 <TabPane tab='注册' key='2'>
                                     <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
                                         <FormItem label="账户">
