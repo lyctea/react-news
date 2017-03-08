@@ -2,15 +2,15 @@ import React from 'react';
 import {Layout} from 'antd';
 import {Row, Col} from 'antd';
 import {
-    Menu,
-    Icon,
-    Tabs,
-    message,
-    Form,
-    Input,
-    Button,
-    CheckBox,
-    Modal
+  Menu,
+  Icon,
+  Tabs,
+  message,
+  Form,
+  Input,
+  Button,
+  CheckBox,
+  Modal
 } from 'antd';
 const FormItem = Form.Item;
 const SubMenu = Menu.SubMenu;
@@ -53,7 +53,7 @@ class MobileHeader extends React.Component {
         var formData = this.props.form.getFieldsValue();
         console.log(formData);
         fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=" + this.state.action
-        + "&username=" + formData.username
+        + "&username=" + formData.userName
         + "&password=" + formData.password
         + "&r_userName=" + formData.r_userName
         + "&r_password=" + formData.r_password
@@ -73,7 +73,7 @@ class MobileHeader extends React.Component {
     login() {
         this.setModalVisible(true);
     };
-    callback(){
+    callback(key){
       if(key === 1){
         this.setState({action:'login'})
       }else if (key === 2) {
@@ -85,7 +85,7 @@ class MobileHeader extends React.Component {
         const userShow = this.state.hasLogined
         ? <Link to={`/usercenter`}>
   					<Icon type="inbox"/>
-  				</Link>
+            </Link>
         : <Icon type="setting" onClick={this.login.bind(this)}/>
        return (
             <div id="mobileheader">
