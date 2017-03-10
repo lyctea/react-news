@@ -1,21 +1,13 @@
 import React from 'react';
 import {Row, Col, Card} from 'antd';
 import {
-    Menu,
-    Icon,
-    Tabs,
-    message,
     Form,
     Input,
     Button,
     CheckBox,
-    Modal
+    notification
 } from 'antd';
 const FormItem = Form.Item;
-const SubMenu = Menu.SubMenu;
-const TabPane = Tabs.TabPane;
-const MenuItemGroup = Menu.ItemGroup;
-import {Router, Route, Link, browserHistory} from 'react-router';
 
 class CommonComments extends React.Component {
     constructor() {
@@ -46,9 +38,19 @@ class CommonComments extends React.Component {
             .then(response => response.json())
             .then(json => {
                 this.componentDidMount();
-            })
+            }).catch(e => {
+            console.log(e);
+        })
     };
-
+    addUserCollection() {
+        var myFetchOptions = {
+            method: 'GET'
+        };
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=uc&userid=" + localStorage.userid + "&uniquekey=" + this.props.uniquekey, myFetchOptions).then(response => response.json()).then(json => {
+            //收藏成功以后进行一下全局的提醒
+            notification['success']({message: 'ReactNews提醒', description: '收藏此文章成功'});
+        });
+    };
     render() {
         let {getFieldProps} = this.props.form;
         const {comments} = this.state;
@@ -59,7 +61,6 @@ class CommonComments extends React.Component {
                 </Card>))
             :
             "没有加载到任何评论";
-
         return (
             <div className="comments">
                 <Row>
@@ -72,6 +73,8 @@ class CommonComments extends React.Component {
                                 </Input>
                             </FormItem>
                             <Button type="primary" htmlType="submit">提交评论</Button>
+                            &nbsp;&nbsp;
+                            <Button type="primary" htmlType="button" onClick={this.addUserCollection.bind(this)}>收藏该文章</Button>
                         </Form>
                     </Col>
                 </Row>
